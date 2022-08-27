@@ -7,9 +7,9 @@ from urllib.request import urlopen as uReq
 app = Flask(__name__)
 
 @app.route('/',methods=['GET'])  # route to display the home page
-@cross_origin()
+@cross_origin() # so anyone can access ti=his from the world/globe
 def homePage():
-    return render_template("index.html")
+    return render_template("index.html")  #creating a html page using the index.html template folder
 
 @app.route('/review',methods=['POST','GET']) # route to show the review comments in a web UI
 @cross_origin()
@@ -39,6 +39,10 @@ def index():
             reviews = []
             for commentbox in commentboxes:
                 try:
+                    price=prodRes.find_all('div',{"class":"_30jeq3 _16Jk6d"})[0].text
+                except:
+                    price= 'not available'
+                try:
                     #name.encode(encoding='utf-8')
                     name = commentbox.div.div.find_all('p', {'class': '_2sc7ZR _2V5EHH'})[0].text
 
@@ -66,7 +70,7 @@ def index():
                 except Exception as e:
                     print("Exception while creating dictionary: ",e)
 
-                mydict = {"Product": searchString, "Name": name, "Rating": rating, "CommentHead": commentHead,
+                mydict = {"price": price, "Product": searchString, "Name": name, "Rating": rating, "CommentHead": commentHead,
                           "Comment": custComment}
                 reviews.append(mydict)
             return render_template('results.html', reviews=reviews[0:(len(reviews)-1)])
